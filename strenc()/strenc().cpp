@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 
 				output << "	const char* GetDecryptedString(const char* encryptedString)" << endl;
 				output << "	{" << endl;
-				output << "		char string[1024];" << endl;
+				output << "		char* string = new char[1024];" << endl;
 				output << "		strcpy(string, encryptedString);" << endl;
 				output << "		StrencDecode(string, " << CurrentFileName.GetSafeFileName() << "_KEY);" << endl;
 				output << "		return string;" << endl;
