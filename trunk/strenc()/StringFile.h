@@ -18,7 +18,7 @@ public:
 private:
 	int stringLength;
 	char name[256];
-	char string[1024];
+	char* string;
 };
 
 class StringFile

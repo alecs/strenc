@@ -64,19 +64,24 @@ int main(int argc, char **argv)
 			{
 				output << "	#define " << CurrentFileName.GetSafeFileName() << "_KEY \"" << Base64::Base64CharacterMap << "\"" << endl;
 
+				int maxSize = 0;
+				for (int i = 0; i < RawStrings->size(); i++)
+				{
+					maxSize = max(strlen((*RawStrings)[i]->String()), maxSize); //find the longest string so we know our static buffers size
+					output << "	#define " << (*RawStrings)[i]->Name() << " GetDecryptedString(\"" << (*RawStrings)[i]->String() << "\")" << endl;
+				}
+
 				output << "	#pragma comment(lib, \"strenc\")" << endl;
 				output << "	void StrencDecode(char* buffer, char* Base64CharacterMap);" << endl;
 
 				output << "	const char* GetDecryptedString(const char* encryptedString)" << endl;
 				output << "	{" << endl;
-				output << "		char* string = new char[1024];" << endl;
+				output << "		static char string[" << maxSize + 1 << "];" << endl;
 				output << "		strcpy(string, encryptedString);" << endl;
 				output << "		StrencDecode(string, " << CurrentFileName.GetSafeFileName() << "_KEY);" << endl;
 				output << "		return string;" << endl;
 				output << "	}" << endl;
 
-				for (int i = 0; i < RawStrings->size(); i++)
-					output << "	#define " << (*RawStrings)[i]->Name() << " GetDecryptedString(\"" << (*RawStrings)[i]->String() << "\")" << endl;
 			}
 			output << "#endif";
 			
